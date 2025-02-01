@@ -1,14 +1,16 @@
 use avian3d::{
+    math::PI,
     prelude::{
-        Collider, ColliderConstructor, ColliderConstructorHierarchy, Friction, Gravity,
-        LinearDamping, LockedAxes, Mass, PhysicsDebugPlugin, RigidBody,
+        CoefficientCombine, Collider, ColliderConstructor, ColliderConstructorHierarchy, Friction,
+        Gravity, LinearDamping, LockedAxes, Mass, PhysicsDebugPlugin, RigidBody,
     },
     PhysicsPlugins,
 };
 use bevy::{math::VectorSpace, prelude::*};
 use camera::{FpsCamera, FpsCameraPlugin};
 use player_movement::{
-    GroundFriction, HoverSpring, KinematicGravity, PlayerMovement, PlayerMovementPlugin,
+    GroundFriction, HoverSpring, KinematicGravity, MaxSlopeAngle, PlayerMovement,
+    PlayerMovementPlugin,
 };
 
 mod camera;
@@ -56,15 +58,15 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             GroundFriction(0.1),
             HoverSpring::new(1.2, 0.95, 100.),
             KinematicGravity(15.),
-            Friction::ZERO,
+            Friction::ZERO.with_combine_rule(CoefficientCombine::Min),
         ))
         .with_child((
             FpsCamera::new(0.1),
-            Camera3d::default(),
+            // Camera3d::default(),
             Transform::from_xyz(0.0, 0.6, 0.0),
         ));
     commands.spawn((
-        //Camera3d::default(),
+        Camera3d::default(),
         Transform::from_xyz(-10., 0., 0.).looking_at(Vec3::ZERO, Vec3::Y),
     ));
 }

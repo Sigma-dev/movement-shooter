@@ -85,7 +85,6 @@ fn handle_spring(
         );
         if let Some(hit) = maybe_hit {
             let diff = spring.target_height - hit.distance;
-            println!("hover height: {}, diff: {}", hit.distance, diff);
             vel.y += diff * spring.strength_factor * time.delta_secs();
             commands.entity(entity).insert(Grounded);
         } else {
@@ -334,7 +333,6 @@ fn update_grounded(
         });
 
         if is_grounded {
-            println!("grounded");
             commands.entity(entity).insert(Grounded);
         } else {
             commands.entity(entity).remove::<Grounded>();
